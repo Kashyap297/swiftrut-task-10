@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/api"; // Import the centralized API
+import api from "../api/api";
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaHome,
+  FaQuestionCircle,
+} from "react-icons/fa"; // Import icons
 
 const Quiz = () => {
   const { id } = useParams();
-  const navigate = useNavigate(); // For navigating between routes
+  const navigate = useNavigate();
   const [quiz, setQuiz] = useState(null);
-  const [answers, setAnswers] = useState({}); // Stores the answers for each question
+  const [answers, setAnswers] = useState({});
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
   useEffect(() => {
-    // Use centralized API to fetch a specific quiz by ID
     api
       .get(`/quizzes/${id}`)
       .then((response) => {
@@ -22,20 +27,18 @@ const Quiz = () => {
   }, [id]);
 
   const handleAnswerChange = (index, answer) => {
-    setAnswers({ ...answers, [index]: answer }); // Store the answer for the specific question
+    setAnswers({ ...answers, [index]: answer });
   };
 
   const handleSubmit = () => {
     const quizData = {
       quizId: id,
-      answers: Object.values(answers), // Convert the object to an array for submission
+      answers: Object.values(answers),
     };
 
-    // Submit the quiz answers using the centralized API
     api
       .post("/quizzes/submit", quizData)
       .then((response) => {
-        // Navigate to score summary page with score, totalQuestions, and quizId
         window.location.href = `/score/${response.data.score}/${response.data.totalQuestions}/${id}`;
       })
       .catch((error) => {
@@ -46,25 +49,25 @@ const Quiz = () => {
   if (!quiz) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-indigo-50 flex justify-center items-center px-6">
-      {/* Main content wrapper */}
+    <div className="min-h-screen bg-gradient-to-r from-indigo-50 to-blue-100 flex justify-center items-center px-6">
       <div className="flex space-x-10 w-full max-w-screen-lg items-start">
-        {/* Question panel */}
+        {/* Question Panel */}
         <div className="flex-grow bg-white rounded-lg shadow-lg p-8">
-          <h1 className="text-2xl font-bold text-blue-600 mb-6">
+          <h1 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+            {" "}
             {currentQuestion + 1}) {quiz.questions[currentQuestion].question}
           </h1>
           <div className="mb-6 space-y-3">
             {quiz.questions[currentQuestion].choices.map((choice, index) => (
               <label
                 key={index}
-                className="block border border-gray-300 p-3 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                className="block border border-gray-300 p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
               >
                 <input
                   type="radio"
-                  name={`question-${currentQuestion}`} // Each question gets a unique name
+                  name={`question-${currentQuestion}`}
                   value={choice}
-                  checked={answers[currentQuestion] === choice} // Check if the current choice matches the stored answer
+                  checked={answers[currentQuestion] === choice}
                   onChange={() => handleAnswerChange(currentQuestion, choice)}
                   className="mr-3"
                 />
@@ -76,23 +79,23 @@ const Quiz = () => {
           <div className="flex justify-between mt-6">
             {currentQuestion > 0 && (
               <button
-                className="bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"
+                className="flex items-center bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"
                 onClick={() => setCurrentQuestion(currentQuestion - 1)}
               >
-                Previous Question
+                <FaArrowLeft className="mr-2" /> Previous
               </button>
             )}
 
             {currentQuestion < quiz.questions.length - 1 ? (
               <button
-                className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
                 onClick={() => setCurrentQuestion(currentQuestion + 1)}
               >
-                Next Question
+                Next <FaArrowRight className="ml-2" />
               </button>
             ) : (
               <button
-                className="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
+                className="flex items-center bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors"
                 onClick={handleSubmit}
               >
                 Submit Quiz
@@ -101,7 +104,7 @@ const Quiz = () => {
           </div>
         </div>
 
-        {/* Sidebar for question numbers and answer status */}
+        {/* Sidebar */}
         <div className="w-80 bg-white rounded-lg shadow-lg p-6">
           <div className="mb-4">
             <h2 className="text-xl font-bold text-gray-700">Answered Status</h2>
@@ -139,7 +142,7 @@ const Quiz = () => {
                     ? "bg-green-500 text-white"
                     : "bg-gray-200 text-gray-600"
                 }`}
-                onClick={() => setCurrentQuestion(index)} // Jump to the selected question
+                onClick={() => setCurrentQuestion(index)}
               >
                 {index + 1}
               </button>
@@ -147,10 +150,10 @@ const Quiz = () => {
           </div>
 
           <button
-            className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors w-full mt-4"
-            onClick={() => navigate("/")} // Redirect to the home page
+            className="flex items-center justify-center bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors w-full mt-4"
+            onClick={() => navigate("/")}
           >
-            Go to Home
+            <FaHome className="mr-2" /> Go to Home
           </button>
         </div>
       </div>

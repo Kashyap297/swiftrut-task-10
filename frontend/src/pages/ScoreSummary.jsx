@@ -1,24 +1,23 @@
 import { useEffect, useState } from "react";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"; // Import icons
 import { useParams } from "react-router-dom";
 import api from "../api/api";
 
 const ScoreSummary = () => {
-  const { score, totalQuestions, quizId } = useParams(); // Include quizId to fetch the quiz
-  const [quiz, setQuiz] = useState(null); // State to hold the quiz data
+  const { score, totalQuestions, quizId } = useParams();
+  const [quiz, setQuiz] = useState(null);
 
   useEffect(() => {
-    // Fetch quiz data using `quizId`
     api
-      .get(`/quizzes/${quizId}`) // Use quizId to fetch the quiz data
+      .get(`/quizzes/${quizId}`)
       .then((response) => {
-        setQuiz(response.data); // Store quiz data in state
+        setQuiz(response.data);
       })
       .catch((error) => {
         console.error("Error fetching quiz data:", error);
       });
   }, [quizId]);
 
-  // Check if quiz is not available yet
   if (!quiz) return <div>Loading...</div>;
 
   return (
@@ -30,7 +29,6 @@ const ScoreSummary = () => {
           {totalQuestions}
         </p>
 
-        {/* Display questions and correct answers */}
         <div className="text-left mt-6">
           <h2 className="text-2xl font-bold mb-4">Exam Results</h2>
           <ul className="space-y-4">
@@ -39,8 +37,9 @@ const ScoreSummary = () => {
                 <p className="font-semibold mb-2">
                   {index + 1}. {question.question}
                 </p>
-                <p className="text-green-600">
-                  Correct Answer: {question.correctAnswer}
+                <p className="text-green-600 flex items-center">
+                  <FaCheckCircle className="mr-2" /> Correct Answer:{" "}
+                  {question.correctAnswer}
                 </p>
               </li>
             ))}
