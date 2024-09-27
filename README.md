@@ -3,7 +3,7 @@ This is a full-stack Quiz Application that allows users to browse and take quizz
 
 Live Link - 
 Front-End : https://swiftrut-task-10.vercel.app/
-backend : [https://vercel.com/kashyap297s-projects/swiftrut-task-10](https://swiftrut-task-10.onrender.com/)
+backend : https://swiftrut-task-10.onrender.com/
 
 To Run Code for frontend: 
 1. git clone
