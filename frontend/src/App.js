@@ -11,8 +11,9 @@ const App = () => {
         <Routes>
           <Route path="/" element={<QuizList />} />
           <Route path="/quiz/:id" element={<Quiz />} />
+          {/* Update route to pass quizId */}
           <Route
-            path="/score/:score/:totalQuestions"
+            path="/score/:score/:totalQuestions/:quizId"
             element={<ScoreSummary />}
           />
         </Routes>

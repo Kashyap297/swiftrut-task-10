@@ -30,12 +30,13 @@ const Quiz = () => {
       quizId: id,
       answers: Object.values(answers), // Convert the object to an array for submission
     };
+
     // Submit the quiz answers using the centralized API
     api
       .post("/quizzes/submit", quizData)
       .then((response) => {
-        // Navigate to score summary page with score
-        window.location.href = `/score/${response.data.score}/${quiz.questions.length}`;
+        // Navigate to score summary page with score, totalQuestions, and quizId
+        window.location.href = `/score/${response.data.score}/${response.data.totalQuestions}/${id}`;
       })
       .catch((error) => {
         console.error("Error submitting quiz:", error);

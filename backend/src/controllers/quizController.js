@@ -23,6 +23,7 @@ exports.getQuizById = async (req, res) => {
 };
 
 // Submit quiz answers and calculate score
+// src/controllers/quizController.js
 exports.submitQuiz = async (req, res) => {
   const { quizId, answers } = req.body;
 
@@ -37,7 +38,13 @@ exports.submitQuiz = async (req, res) => {
       }
     });
 
-    res.status(200).json({ score, totalQuestions: quiz.questions.length });
+    // Return the quiz, score, and user's answers in the response
+    res.status(200).json({
+      score,
+      totalQuestions: quiz.questions.length,
+      quiz, // Full quiz object
+      userAnswers: answers, // User's answers array
+    });
   } catch (error) {
     res.status(500).json({ message: "Error submitting quiz" });
   }
